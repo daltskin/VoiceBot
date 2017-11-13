@@ -1,4 +1,6 @@
-﻿using EmergencyServicesBot;
+﻿namespace EmergencyServicesBot
+{
+    using EmergencyServicesBot.Services;
 using Microsoft.Bot.Builder.Calling;
 using Microsoft.Bot.Builder.Calling.Events;
 using Microsoft.Bot.Builder.Calling.ObjectModel.Contracts;
@@ -9,10 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace EmergencyServicesBot
-{
     public class IVRBot : IDisposable, ICallingBot
     {
         // DTMF keys required for each of option, will be used for parsing results of recognize
@@ -21,13 +20,12 @@ namespace EmergencyServicesBot
 
         // Response messages depending on user selection
         private const string Message_Welcome = "Hello, you have successfully contacted the Emergency Services Bot.";
-        private const string Message_MainMenuPrompt = "If you have a life threatening medical emergency please contact the emergency services or go to your nearest hospital.  For non-life threatening situations please press 2.";
+        private const string Message_MainMenuPrompt = "If you have a life threatening medical emergency please go to your nearest hospital.  For non-life threatening situations please press 2.";
         private const string Message_NoConsultants = "Whilst we wait to connect you, please leave your name and a description of your problem. You can press the hash key when finished. We will call you as soon as possible.";
         private const string Message_Ending = "Thank you for leaving the message, goodbye";
 
         public IEnumerable<Participant> Participants { get; set; }
         private readonly Dictionary<string, CallState> _callStateMap = new Dictionary<string, CallState>();
-        private readonly MicrosoftCognitiveSpeechService speechService = new MicrosoftCognitiveSpeechService();
 
         public ICallingBotService CallingBotService { get; private set; }
 
@@ -89,8 +87,8 @@ namespace EmergencyServicesBot
             if (recordOutcomeEvent.RecordOutcome.Outcome == Outcome.Success)
             {
                 var record = await recordOutcomeEvent.RecordedContent;
-                string text = await GetTextFromAudioAsync(record);
-                await SendSTTResultToUser("We detected the following audio: " + text);
+                string sst = await BingSpeech.GetTextFromAudioAsync(record);
+                await SendSTTResultToUser($"We detected the following audio: {sst}");
             }
 
             recordOutcomeEvent.ResultingWorkflow.Links = null;
@@ -127,7 +125,7 @@ namespace EmergencyServicesBot
         /// <returns>Transcribed text. </returns>
         public async Task<string> GetTextFromAudioAsync(Stream audiostream)
         {
-            var text = await speechService.GetTextFromAudioAsync(audiostream);
+            var text = await BingSpeech.GetTextFromAudioAsync(audiostream);
             Debug.WriteLine(text);
             return text;
         }

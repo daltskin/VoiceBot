@@ -18,8 +18,18 @@ within the conversation.
 # To run this bot, follow the below steps
 
 1. Create a new bot on the dev.botframework.com portal
-2. Update the Skype settings of the bot, by enabling audio calls and updating the Calling Webhook
+2. Update the bot Skype channel settings, by enabling audio calls and updating the Calling Webhook within the portal:
+* Enable Calling
+* Enable IVR - 1:1 audio calls
+* Set the Webhook for calling eg https://7fb612b1.ngrok.io/api/calling/call
 3. Add your bot to your Skype contacts
 4. Ensure the bot code is running using your bot settings in the web.config
-5. Within Skype Preview, the Call icon should light up - click to begin
+* "Microsoft.Bot.Builder.Calling.CallbackUrl" eg: https://7fb612b1.ngrok.io/api/calling/callback
+* "MicrosoftSpeechApiKey" eg: get this from here: https://azure.microsoft.com/en-gb/try/cognitive-services/?api=speech-api
+5. Within Skype, the Call icon should light up - click to begin conversation
+* Display the Dial pad
+* Select Option 2
+* Record a short message and press # to end
+* Hang up the call
+* Your message should be converted to text and shown in the message window
 

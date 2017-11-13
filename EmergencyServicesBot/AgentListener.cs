@@ -1,10 +1,10 @@
-﻿using Microsoft.Bot.Connector;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-
-namespace EmergencyServicesBot
+﻿namespace EmergencyServicesBot
 {
+    using Microsoft.Bot.Connector;
+    using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+
     public class AgentListener
     {
         //Note: Of course you don't want these here. Eventually you will need to save these in some table
